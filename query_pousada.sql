@@ -122,3 +122,6 @@ INSERT INTO tbl_client (name_client, cpf_client, ddd_client, phone_client, adres
 ('Pedro Souza', 	05486033087, 61, 432109876, 67890123, 'pedro.souza@email.com', 		'pedro' 	  ),
 ('Luciana Costa',   38812538070, 71, 321098765, 78901234, 'luciana.costa@email.com', 	'luciana'	  ),
 ('Felipe Oliveira', 23235995005, 81, 210987654, 89012345, 'felipe.oliveira@email.com', 	'felipe'      );
+
+INSERT INTO tbl_ticket (fk_IDroom, fk_IDclient, checkin_ticket, checkout_ticket) VALUES
+(1, 1, '2024-06-01', '2024-06-08');
