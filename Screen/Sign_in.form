@@ -74,6 +74,8 @@
                           <Group type="102" attributes="0">
                               <Component id="btn_edit3" min="-2" pref="85" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
+                              <Component id="btn_edit4" min="-2" pref="85" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="btn_edit2" min="-2" pref="85" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
                           </Group>
@@ -114,6 +116,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="btn_edit2" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btn_edit3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btn_edit4" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -194,6 +197,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_edit3ActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btn_edit4">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Cadastro"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_edit4ActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

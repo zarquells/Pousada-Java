@@ -21,6 +21,7 @@ public class Sign_in extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         btn_edit2 = new javax.swing.JButton();
         btn_edit3 = new javax.swing.JButton();
+        btn_edit4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tela Inicial");
@@ -69,6 +70,13 @@ public class Sign_in extends javax.swing.JFrame {
             }
         });
 
+        btn_edit4.setText("Cadastro");
+        btn_edit4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_edit4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,6 +98,8 @@ public class Sign_in extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btn_edit3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_edit4, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(btn_edit2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(72, 72, 72))
                             .addComponent(jLabel6)
@@ -121,7 +131,8 @@ public class Sign_in extends javax.swing.JFrame {
                         .addGap(504, 504, 504)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btn_edit2)
-                            .addComponent(btn_edit3))))
+                            .addComponent(btn_edit3)
+                            .addComponent(btn_edit4))))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -139,6 +150,10 @@ public class Sign_in extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_edit3ActionPerformed
 
+    private void btn_edit4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_edit4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_edit4ActionPerformed
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -151,6 +166,7 @@ public class Sign_in extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_edit2;
     private javax.swing.JButton btn_edit3;
+    private javax.swing.JButton btn_edit4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
