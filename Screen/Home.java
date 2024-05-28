@@ -13,7 +13,7 @@ public class Home extends javax.swing.JFrame {
     
     public static String checkin  = "";
     public static String checkout = "";
-    public static String[] roomsOcupate = new String[31];
+    public static String[] roomsOcupate = new String[30];
     //Variáveis que serão responsáveis por checar quartos disponíveis
     
     public Home(){
@@ -22,9 +22,22 @@ public class Home extends javax.swing.JFrame {
     }
     
     public void confirm(){
+        while (true) {
+            checkin = input_checkin.getText();
+            checkout = input_checkout.getText();
+
+            if (checkin.isBlank() || checkout.isBlank()) {
+                JOptionPane.showMessageDialog(null, "Preencha os campos obrigatórios: check-in e check-out!");
+                return;
+                
+            }else{
+                break;
+                
+            }
+        }
+        
         try{
-            String query = "SELECT DISTINCT fk_IDroom FROM tbl_ticket "
-            + "WHERE (checkin_ticket BETWEEN ? AND ?) OR (checkout_ticket BETWEEN ? AND ?)";
+            String query = "SELECT DISTINCT fk_IDroom FROM tbl_ticket WHERE (checkin_ticket BETWEEN ? AND ?) OR (checkout_ticket BETWEEN ? AND ?)";
             
             ExecutarComando = ConexaoBD.prepareStatement(query);
             
@@ -44,8 +57,7 @@ public class Home extends javax.swing.JFrame {
             
             Room window_quarto = new Room();
             window_quarto.setVisible(true);
-            
-            JOptionPane.showMessageDialog(null, roomsOcupate);
+           
         }catch(Exception e){
             JOptionPane.showMessageDialog(null,"Algo deu errado, tente novamente: " + e);
         }

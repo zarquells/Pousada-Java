@@ -1,9 +1,8 @@
 package Screen;
 
 import Connection_SQL.Connection_SQL;
-import static Screen.Home.roomsOcupate;
 import Screen.Sign_in;
-
+import Screen.Sign_up;
 
 import java.sql.*;
 import javax.swing.JOptionPane;
@@ -14,69 +13,79 @@ public class Room extends javax.swing.JFrame {
     PreparedStatement ExecutarComando = null;
     ResultSet RespostaBD = null;
     //variáveis de conexão que ainda receberão seus respectivos valores
-
-    int value_ID = 1;
-    //variáveis para inicializar a primeira requisição de quarto
     
     public Room() {
         initComponents();
     }
     
-    public void next_room(int value_ID){
-        
-        String query = "SELECT pk_IDroom, description_room, price_room FROM tbl_room WHERE id=";
-        
-        try{
-            String id_room          = null;
-            String description_room = null;
-            String price_room       = null;
+    public void next_room(){
+        for(int x = 1; x <= 30; x++){
+            int value_ID = x;
             
-            ConexaoBD = Connection_SQL.conexao();
-            
-            ExecutarComando = ConexaoBD.prepareStatement(query);
-            ExecutarComando.setInt(1,value_ID);
-            RespostaBD = ExecutarComando.executeQuery();
-            
-            if(RespostaBD.next()){
-                id_room          = RespostaBD.getString("pk_IDroom");
-                description_room = RespostaBD.getString("description_room");
-                price_room       = RespostaBD.getString("price_room");
-                
-            }else{
-                JOptionPane.showMessageDialog(null, "Não foi possível achar quartos disponíveis. Banco de dados vazio.");
-                
-            }
-            
-            for(int i = 0; i <= 30; i++){
-                if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
-                    btn_check.setVisible(false);
-                    break;
-                
-                }else if(i == 30){
-                    if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
-                        btn_check.setVisible(false);
-                        
-                    }else{return;}
+            String query = "SELECT pk_IDroom, description_room, price_room FROM tbl_room WHERE pk_IDroom=?";
+
+            try{
+                String id_room          = null;
+                String description_room = null;
+                String price_room       = null;
+
+                ConexaoBD = Connection_SQL.conexao();
+
+                ExecutarComando = ConexaoBD.prepareStatement(query);
+                ExecutarComando.setInt(1,value_ID);
+                RespostaBD = ExecutarComando.executeQuery();
+
+                if(RespostaBD.next()){
+                    id_room          = RespostaBD.getString("pk_IDroom");
+                    description_room = RespostaBD.getString("description_room");
+                    price_room       = RespostaBD.getString("price_room");
                     
                     number_out.setText(id_room);
                     description_out.setText(description_room);
-                    price_out.setText(price_room);
+                    price_out.setText(price_room);                    
                     
-                    btn_next.setVisible(false);
-                    break;
-              
                 }else{
-                    return;
-                    
+                    JOptionPane.showMessageDialog(null, "Não foi possível achar quartos disponíveis. Banco de dados vazio.");
+                    dispose();
+
                 }
+
+//                for(int i = 0; i <= 30; i++){;
+//                    if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
+//                        btn_check.setVisible(false);
+//                        break;
+//
+//                    }else if(i == 30){
+//                        if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
+//                            btn_check.setVisible(false);
+//
+//                        }else{
+//                            return;
+//
+//                        }
+//                        number_out.setText(id_room);
+//                        description_out.setText(description_room);
+//                        price_out.setText(price_room);
+//
+//                        btn_next.setVisible(false);
+//                        break;
+//
+//                    }else{
+//                        number_out.setText(id_room);
+//                        description_out.setText(description_room);
+//                        price_out.setText(price_room);
+//
+//                        return;
+//
+//                    }
+//                }
+
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Não foi possível estabelecer conexão com o banco: " + e);
             }
-                        
-            
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Não foi possível estabelecer conexão com o banco: " + e);
+
         }
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -102,43 +111,57 @@ public class Room extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1200, 800));
         setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Century Gothic", 3, 12)); // NOI18N
         jLabel1.setText("Irmãos Beans");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/logo.png"))); // NOI18N
         jLabel2.setMaximumSize(new java.awt.Dimension(30, 30));
         jLabel2.setMinimumSize(new java.awt.Dimension(30, 30));
         jLabel2.setName(""); // NOI18N
         jLabel2.setPreferredSize(new java.awt.Dimension(30, 30));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 40, 40));
 
         jLabel3.setFont(new java.awt.Font("Century Gothic", 3, 12)); // NOI18N
         jLabel3.setText("Pousada");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, -1));
+        getContentPane().add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 56, 1200, 8));
 
         jLabel5.setFont(new java.awt.Font("Segoe Print", 3, 36)); // NOI18N
         jLabel5.setText("Quartos disponíveis");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 100, 360, -1));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
         jLabel12.setText("Verifique a disponibilidade");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 220, -1, -1));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Veja a variada opções dos 30 quarto da nossa pousada ");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 190, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel8.setText("Número do Quarto:");
+        jLabel8.setText("Quarto:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(782, 264, 75, -1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel9.setText("Preço:");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(782, 334, 75, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setText("Descrição:");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 290, 75, -1));
 
         number_out.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         number_out.setToolTipText("");
+        getContentPane().add(number_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(863, 264, 76, 20));
 
         price_out.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(price_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(863, 334, 75, 20));
 
         description_out.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        getContentPane().add(description_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 290, 270, 20));
 
         btn_next.setText("Próximo quarto");
         btn_next.addActionListener(new java.awt.event.ActionListener() {
@@ -146,6 +169,7 @@ public class Room extends javax.swing.JFrame {
                 btn_nextActionPerformed(evt);
             }
         });
+        getContentPane().add(btn_next, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 410, -1, -1));
 
         btnVoltar.setText("Quarto anterior");
         btnVoltar.addActionListener(new java.awt.event.ActionListener() {
@@ -153,6 +177,7 @@ public class Room extends javax.swing.JFrame {
                 btnVoltarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnVoltar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 410, -1, -1));
 
         btn_check.setText("Realizar reserva");
         btn_check.addActionListener(new java.awt.event.ActionListener() {
@@ -160,102 +185,18 @@ public class Room extends javax.swing.JFrame {
                 btn_checkActionPerformed(evt);
             }
         });
+        getContentPane().add(btn_check, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 460, -1, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/image_room.png"))); // NOI18N
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1)))
-            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 1200, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(790, 790, 790)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(790, 790, 790)
-                .addComponent(jLabel7))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(790, 790, 790)
-                .addComponent(jLabel12))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(790, 790, 790)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(number_out, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(790, 790, 790)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(description_out, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(790, 790, 790)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(price_out, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel4)
-                .addGap(96, 96, 96)
-                .addComponent(btnVoltar)
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_next)
-                    .addComponent(btn_check)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel1)))
-                .addGap(6, 6, 6)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(jLabel5)
-                .addGap(26, 26, 26)
-                .addComponent(jLabel7)
-                .addGap(10, 10, 10)
-                .addComponent(jLabel12)
-                .addGap(36, 36, 36)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(number_out, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(description_out, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9)
-                    .addComponent(price_out, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnVoltar)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn_next)
-                                .addGap(27, 27, 27)
-                                .addComponent(btn_check))))))
-        );
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, -1, -1));
 
         setSize(new java.awt.Dimension(1214, 807));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nextActionPerformed
-
+        next_room();
+        
     }//GEN-LAST:event_btn_nextActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
