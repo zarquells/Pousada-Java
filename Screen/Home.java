@@ -54,6 +54,7 @@ public class Home extends javax.swing.JFrame {
                 roomsOcupate[i] = String.valueOf(RespostaBD.getInt("fk_IDroom"));
                 i++;
             }
+            dispose();
             
             Room window_quarto = new Room();
             window_quarto.setVisible(true);

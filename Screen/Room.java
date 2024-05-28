@@ -1,6 +1,7 @@
 package Screen;
 
 import Connection_SQL.Connection_SQL;
+import static Screen.Home.roomsOcupate;
 import Screen.Sign_in;
 import Screen.Sign_up;
 
@@ -16,6 +17,63 @@ public class Room extends javax.swing.JFrame {
     
     public Room() {
         initComponents();
+
+        int value_ID = 1;
+
+        String query = "SELECT pk_IDroom, description_room, price_room FROM tbl_room WHERE pk_IDroom=?";
+
+        try{
+            String id_room          = null;
+            String description_room = null;
+            String price_room       = null;
+
+            ConexaoBD = Connection_SQL.conexao();
+
+            ExecutarComando = ConexaoBD.prepareStatement(query);
+            ExecutarComando.setInt(1,value_ID);
+            RespostaBD = ExecutarComando.executeQuery();
+
+            if(RespostaBD.next()){
+                id_room          = RespostaBD.getString("pk_IDroom");
+                description_room = RespostaBD.getString("description_room");
+                price_room       = RespostaBD.getString("price_room");
+
+                number_out.setText(id_room);
+                description_out.setText(description_room);
+                price_out.setText(price_room);                    
+
+            }else{
+                JOptionPane.showMessageDialog(null, "Não foi possível achar quartos disponíveis. Banco de dados vazio.");
+                dispose();
+            }
+            
+            for(int i = 0; i <= 30; i++){
+                if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
+                    btn_check.setVisible(false);
+                    break;
+
+                }else if(i == 30){
+                    if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
+                        btn_check.setVisible(false);
+
+                    }else{
+                        return;
+
+                    }
+
+                    btn_next.setVisible(false);
+                    break;
+
+                }else{
+
+                    return;
+                }
+            }
+
+
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Não foi possível estabelecer conexão com o banco: " + e);   
+        }
     }
     
     public void next_room(){
@@ -50,38 +108,38 @@ public class Room extends javax.swing.JFrame {
 
                 }
 
-//                for(int i = 0; i <= 30; i++){;
-//                    if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
-//                        btn_check.setVisible(false);
-//                        break;
-//
-//                    }else if(i == 30){
-//                        if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
-//                            btn_check.setVisible(false);
-//
-//                        }else{
-//                            return;
-//
-//                        }
-//                        number_out.setText(id_room);
-//                        description_out.setText(description_room);
-//                        price_out.setText(price_room);
-//
-//                        btn_next.setVisible(false);
-//                        break;
-//
-//                    }else{
-//                        number_out.setText(id_room);
-//                        description_out.setText(description_room);
-//                        price_out.setText(price_room);
-//
-//                        return;
-//
-//                    }
-//                }
+                for(int i = 0; i <= 30; i++){
+                    if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
+                        btn_check.setVisible(false);
+                        break;
+
+                    }else if(i == 30){
+                        if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
+                            btn_check.setVisible(false);
+
+                        }else{
+                            return;
+
+                        }
+                        number_out.setText(id_room);
+                        description_out.setText(description_room);
+                        price_out.setText(price_room);
+
+                        btn_next.setVisible(false);
+                        break;
+
+                    }else{
+                        number_out.setText(id_room);
+                        description_out.setText(description_room);
+                        price_out.setText(price_room);
+
+                        return;
+
+                    }
+                }
 
             }catch(Exception e){
-                JOptionPane.showMessageDialog(null, "Não foi possível estabelecer conexão com o banco: " + e);
+                JOptionPane.showMessageDialog(null, "Não foi possível efetuar o comando: " + e);
             }
 
         }
@@ -104,11 +162,12 @@ public class Room extends javax.swing.JFrame {
         price_out = new javax.swing.JLabel();
         description_out = new javax.swing.JLabel();
         btn_next = new javax.swing.JButton();
-        btnVoltar = new javax.swing.JButton();
+        btnHome = new javax.swing.JButton();
         btn_check = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        btnVoltar1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1200, 800));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -169,15 +228,15 @@ public class Room extends javax.swing.JFrame {
                 btn_nextActionPerformed(evt);
             }
         });
-        getContentPane().add(btn_next, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 410, -1, -1));
+        getContentPane().add(btn_next, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 410, 130, -1));
 
-        btnVoltar.setText("Quarto anterior");
-        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+        btnHome.setText("Cancelar");
+        btnHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVoltarActionPerformed(evt);
+                btnHomeActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVoltar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 410, -1, -1));
+        getContentPane().add(btnHome, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 460, 130, -1));
 
         btn_check.setText("Realizar reserva");
         btn_check.addActionListener(new java.awt.event.ActionListener() {
@@ -185,10 +244,18 @@ public class Room extends javax.swing.JFrame {
                 btn_checkActionPerformed(evt);
             }
         });
-        getContentPane().add(btn_check, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 460, -1, -1));
+        getContentPane().add(btn_check, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 460, 130, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/image_room.png"))); // NOI18N
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, -1, -1));
+
+        btnVoltar1.setText("Quarto anterior");
+        btnVoltar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltar1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnVoltar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 410, 130, -1));
 
         setSize(new java.awt.Dimension(1214, 807));
         setLocationRelativeTo(null);
@@ -199,13 +266,20 @@ public class Room extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btn_nextActionPerformed
 
-    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-
-    }//GEN-LAST:event_btnVoltarActionPerformed
+    private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+            dispose();
+        
+            Home window_home = new Home();
+            window_home.setVisible(true);
+    }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btn_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_checkActionPerformed
  
     }//GEN-LAST:event_btn_checkActionPerformed
+
+    private void btnVoltar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVoltar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -243,7 +317,8 @@ public class Room extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnVoltar;
+    private javax.swing.JButton btnHome;
+    private javax.swing.JButton btnVoltar1;
     private javax.swing.JButton btn_check;
     private javax.swing.JButton btn_next;
     public static javax.swing.JLabel description_out;
