@@ -3,7 +3,6 @@ package Screen;
 import Connection_SQL.Connection_SQL;
 import static Screen.Home.roomsOcupate;
 import Screen.Sign_in;
-import Screen.Sign_up;
 
 import java.sql.*;
 import javax.swing.JOptionPane;
@@ -267,18 +266,21 @@ public class Room extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_nextActionPerformed
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
-            dispose();
+        dispose();
         
-            Home window_home = new Home();
-            window_home.setVisible(true);
+        Home window_home = new Home();
+        window_home.setVisible(true);
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btn_checkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_checkActionPerformed
- 
+        setVisible(false);
+        
+        Sign_in window_home = new Sign_in();
+        window_home.setVisible(true);
     }//GEN-LAST:event_btn_checkActionPerformed
 
     private void btnVoltar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltar1ActionPerformed
-        // TODO add your handling code here:
+//        back_room();
     }//GEN-LAST:event_btnVoltar1ActionPerformed
 
     /**
