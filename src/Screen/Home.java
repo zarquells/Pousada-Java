@@ -56,10 +56,9 @@ public class Home extends javax.swing.JFrame {
                 roomsOcupate[i] = String.valueOf(RespostaBD.getInt("fk_IDroom"));
                 i++;
             }
+            JOptionPane.showMessageDialog(null, roomsOcupate);
             dispose();
             
-//            Room window_quarto = new Room();
-//            window_quarto.setVisible(true);
             Room newRoom = new Room();
             newRoom.setVisible(true);
            

@@ -12,7 +12,7 @@ public class Room extends javax.swing.JFrame {
     Connection ConexaoBD = Connection_SQL.conexao();
     PreparedStatement ExecutarComando = null;
     ResultSet RespostaBD = null;
-    int value_ID = 1;
+    public static int value_ID = 1;
     //variáveis de conexão que ainda receberão seus respectivos valores
     
     public Room() {
@@ -81,6 +81,7 @@ public class Room extends javax.swing.JFrame {
                 ExecutarComando = ConexaoBD.prepareStatement(query);
                 ExecutarComando.setInt(1,value_ID);
                 RespostaBD = ExecutarComando.executeQuery();
+                
 
                 if(RespostaBD.next()) {
                     id_room          = RespostaBD.getString("pk_IDroom");
@@ -95,22 +96,20 @@ public class Room extends javax.swing.JFrame {
                     if(value_ID > 29){
                         btn_next.setEnabled(false);                       
                     }
+                    
+                    boolean isOccuped = false;
+                    for (int i = 0; i < roomsOcupate.length; i++) {
+                        if (roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)) {
+                            isOccuped = true;
+                            break;
+                        }
+                    }
+
+                    btn_check.setVisible(!isOccuped);
                    
                 }else{
                     JOptionPane.showMessageDialog(null, "Não foi possível achar mais quartos. Banco de dados possivelmente vazio.");
 
-                }
-
-                for(int i = 0; i <= 30; i++){
-                    if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
-                        btn_check.setVisible(false);
-                        break;
-
-                     }else{
-                        btn_check.setVisible(true);
-                        return;
-                        
-                    }
                 }
 
             }catch(Exception e){
@@ -120,6 +119,10 @@ public class Room extends javax.swing.JFrame {
     }
     
     public void back_room(){
+            if (value_ID <= 1) {
+                return;
+            }
+            
             value_ID  = valuenext-1;
             valuenext = value_ID;
             String query = "SELECT pk_IDroom, description_room, price_room FROM tbl_room WHERE pk_IDroom = ?";
@@ -150,22 +153,20 @@ public class Room extends javax.swing.JFrame {
                         btn_back.setEnabled(false);                        
                     }
                     
+                    boolean isOccupied = false;
+                    for (int i = 0; i < roomsOcupate.length; i++) {
+                        if (roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)) {
+                            isOccupied = true;
+                            break;
+                        }
+                    }
+
+                    btn_check.setVisible(!isOccupied);
+                    
                 }else{
                     JOptionPane.showMessageDialog(null, "Não foi possível achar mais quartos. Banco de dados possivelmente vazio.");
                     return;
                     
-                }
-
-                for(int i = 0; i <= 30; i++){
-                    if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
-                        btn_check.setVisible(false);
-                        break;
-
-                     }else{
-                        btn_check.setVisible(true);
-                        return;
-                        
-                    }
                 }
                 
             }catch(Exception e){

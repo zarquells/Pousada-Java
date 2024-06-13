@@ -1,10 +1,76 @@
 package Screen;
 
-public class Sign_in extends javax.swing.JFrame {
+import Connection_SQL.Connection_SQL;
+import static Screen.Home.checkin;
+import static Screen.Home.checkout;
+import static Screen.Room.value_ID;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import static java.lang.Integer.*;
+import javax.swing.JOptionPane;
 
+public class Sign_in extends javax.swing.JFrame {
+    
+    Connection        conexaoBD = Connection_SQL.conexao();
+    PreparedStatement executarComando = null;
+    ResultSet         respostaBD = null;
+    
     public Sign_in() {
         initComponents();
         
+        
+    }
+    
+    public void Logar(){
+        String comandoSQLSearch ="SELECT * FROM tbl_client WHERE email_client=? AND password_client=?";
+
+        try{
+            executarComando = conexaoBD.prepareStatement(comandoSQLSearch);
+            
+            executarComando.setString(1, input_email.getText());
+            executarComando.setString(2, input_pwd.getText());
+            
+            respostaBD = executarComando.executeQuery();
+            
+            if(respostaBD.next()){
+                String comandoSQL = "INSERT INTO tbl_ticket(fk_IDroom, fk_IDclient, checkin_ticket, checkout_ticket) VALUES (?, ?, ?, ?)";
+                
+                try{    
+                    executarComando = conexaoBD.prepareStatement(comandoSQL);
+                    
+                    executarComando.setInt(1, value_ID);
+                    executarComando.setInt(2, parseInt(respostaBD.getString(1)));
+                    
+                    //convertendo datas...
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date parsedCheckin = dateFormat.parse(checkin);
+                    java.util.Date parsedCheckout = dateFormat.parse(checkout);
+                    
+                    java.sql.Date sqlCheckin = new java.sql.Date(parsedCheckin.getTime());
+                    java.sql.Date sqlCheckout = new java.sql.Date(parsedCheckout.getTime());
+                    //acabou de converter...
+                    
+                    executarComando.setDate(3, sqlCheckin);
+                    executarComando.setDate(4, sqlCheckout);
+
+                    executarComando.executeUpdate();
+                    
+                       
+                }catch(Exception e){
+                    JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido!", "Erro de autenticação SQL", JOptionPane.WARNING_MESSAGE);
+                    
+                }
+                
+                JOptionPane.showMessageDialog(rootPane, "Seu quarto foi alugado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);                
+                
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Usuário/Senha inválido!", "Erro de autenticação SQL", JOptionPane.WARNING_MESSAGE);
+                
+            }
+        } catch(Exception e){
+            JOptionPane.showMessageDialog(null, e, "Erro!", JOptionPane.ERROR_MESSAGE);
+            
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -23,6 +89,10 @@ public class Sign_in extends javax.swing.JFrame {
         btn_edit3 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        input_pwd = new javax.swing.JTextField();
+        input_email = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela Inicial");
@@ -51,13 +121,10 @@ public class Sign_in extends javax.swing.JFrame {
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/image_login.png"))); // NOI18N
 
-        jLabel5.setForeground(null);
-        jLabel5.setText("Que bom que você voltou, venha aproveitar as exclusividades dos irmãos Beans!");
+        jLabel5.setText("Que bom que você veio, venha aproveitar as exclusividades dos irmãos Beans!");
 
-        jLabel6.setForeground(null);
         jLabel6.setText("Bem-vindo Sr. Cliente!");
 
-        jLabel7.setForeground(null);
         jLabel7.setText("Faça o login aqui!");
 
         btn_edit2.setText("Login");
@@ -74,7 +141,6 @@ public class Sign_in extends javax.swing.JFrame {
             }
         });
 
-        jLabel8.setForeground(null);
         jLabel8.setText("Caso ainda não seja nosso cliente,");
 
         jLabel9.setForeground(new java.awt.Color(102, 153, 255));
@@ -84,6 +150,10 @@ public class Sign_in extends javax.swing.JFrame {
                 jLabel9MouseClicked(evt);
             }
         });
+
+        jLabel10.setText("Senha:");
+
+        jLabel11.setText("E-mail:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,20 +174,29 @@ public class Sign_in extends javax.swing.JFrame {
                         .addGap(50, 50, 50)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn_edit3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btn_edit2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(72, 72, 72))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel7)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel8)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                            .addComponent(jLabel8)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel10)
+                                                .addComponent(jLabel11))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(input_pwd, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                                                .addComponent(input_email)))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(btn_edit3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_edit2, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(72, 72, 72)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -141,7 +220,15 @@ public class Sign_in extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addGap(14, 14, 14)
                         .addComponent(jLabel7)
-                        .addGap(470, 470, 470)
+                        .addGap(89, 89, 89)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(input_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(input_pwd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10))
+                        .addGap(308, 308, 308)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel8)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -159,7 +246,7 @@ public class Sign_in extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_edit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_edit2ActionPerformed
-       
+        Logar();
     }//GEN-LAST:event_btn_edit2ActionPerformed
 
     private void btn_edit3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_edit3ActionPerformed
@@ -187,7 +274,11 @@ public class Sign_in extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_edit2;
     private javax.swing.JButton btn_edit3;
+    private javax.swing.JTextField input_email;
+    private javax.swing.JTextField input_pwd;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
