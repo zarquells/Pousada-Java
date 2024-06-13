@@ -12,12 +12,11 @@ public class Room extends javax.swing.JFrame {
     Connection ConexaoBD = Connection_SQL.conexao();
     PreparedStatement ExecutarComando = null;
     ResultSet RespostaBD = null;
+    int value_ID = 1;
     //variáveis de conexão que ainda receberão seus respectivos valores
     
     public Room() {
         initComponents();
-
-        int value_ID = 1;
 
         String query = "SELECT pk_IDroom, description_room, price_room FROM tbl_room WHERE pk_IDroom=?";
 
@@ -39,11 +38,13 @@ public class Room extends javax.swing.JFrame {
 
                 number_out.setText(id_room);
                 description_out.setText(description_room);
-                price_out.setText(price_room);                    
+                price_out.setText(price_room);
+                
+                btn_back.setEnabled(false);
 
             }else{
-                JOptionPane.showMessageDialog(null, "Não foi possível achar quartos disponíveis. Banco de dados vazio.");
-                dispose();
+                JOptionPane.showMessageDialog(null, "Não foi possível achar quartos. Banco de dados vazio.");
+                
             }
             
             for(int i = 0; i <= 30; i++){
@@ -51,21 +52,10 @@ public class Room extends javax.swing.JFrame {
                     btn_check.setVisible(false);
                     break;
 
-                }else if(i == 30){
-                    if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
-                        btn_check.setVisible(false);
-
-                    }else{
-                        return;
-
-                    }
-
-                    btn_next.setVisible(false);
-                    break;
-
-                }else{
-
+                 }else{
+                    btn_check.setVisible(true);
                     return;
+
                 }
             }
 
@@ -75,11 +65,64 @@ public class Room extends javax.swing.JFrame {
         }
     }
     
+    int valuenext = 1;
     public void next_room(){
-        for(int x = 1; x <= 30; x++){
-            int value_ID = x;
+            value_ID  = valuenext+1;
+            valuenext = value_ID;
+            String query = "SELECT pk_IDroom, description_room, price_room FROM tbl_room WHERE pk_IDroom = ?";
+
+            try{
+                String id_room          = null;
+                String description_room = null;
+                String price_room       = null;
+
+                ConexaoBD = Connection_SQL.conexao();
+
+                ExecutarComando = ConexaoBD.prepareStatement(query);
+                ExecutarComando.setInt(1,value_ID);
+                RespostaBD = ExecutarComando.executeQuery();
+
+                if(RespostaBD.next()) {
+                    id_room          = RespostaBD.getString("pk_IDroom");
+                    description_room = RespostaBD.getString("description_room");
+                    price_room       = RespostaBD.getString("price_room");
+                    
+                    number_out.setText(id_room);
+                    description_out.setText(description_room);
+                    price_out.setText(price_room);
+                    btn_back.setEnabled(true);
+                    
+                    if(value_ID > 29){
+                        btn_next.setEnabled(false);                       
+                    }
+                   
+                }else{
+                    JOptionPane.showMessageDialog(null, "Não foi possível achar mais quartos. Banco de dados possivelmente vazio.");
+
+                }
+
+                for(int i = 0; i <= 30; i++){
+                    if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
+                        btn_check.setVisible(false);
+                        break;
+
+                     }else{
+                        btn_check.setVisible(true);
+                        return;
+                        
+                    }
+                }
+
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Não foi possível efetuar o comando: " + e);
+            }
             
-            String query = "SELECT pk_IDroom, description_room, price_room FROM tbl_room WHERE pk_IDroom=?";
+    }
+    
+    public void back_room(){
+            value_ID  = valuenext-1;
+            valuenext = value_ID;
+            String query = "SELECT pk_IDroom, description_room, price_room FROM tbl_room WHERE pk_IDroom = ?";
 
             try{
                 String id_room          = null;
@@ -99,12 +142,18 @@ public class Room extends javax.swing.JFrame {
                     
                     number_out.setText(id_room);
                     description_out.setText(description_room);
-                    price_out.setText(price_room);                    
+                    price_out.setText(price_room);
+                    
+                    btn_next.setEnabled(true);
+                    
+                    if(value_ID < 2){
+                        btn_back.setEnabled(false);                        
+                    }
                     
                 }else{
-                    JOptionPane.showMessageDialog(null, "Não foi possível achar quartos disponíveis. Banco de dados vazio.");
-                    dispose();
-
+                    JOptionPane.showMessageDialog(null, "Não foi possível achar mais quartos. Banco de dados possivelmente vazio.");
+                    return;
+                    
                 }
 
                 for(int i = 0; i <= 30; i++){
@@ -112,37 +161,19 @@ public class Room extends javax.swing.JFrame {
                         btn_check.setVisible(false);
                         break;
 
-                    }else if(i == 30){
-                        if(roomsOcupate[i] != null && roomsOcupate[i].equals(id_room)){
-                            btn_check.setVisible(false);
-
-                        }else{
-                            return;
-
-                        }
-                        number_out.setText(id_room);
-                        description_out.setText(description_room);
-                        price_out.setText(price_room);
-
-                        btn_next.setVisible(false);
-                        break;
-
-                    }else{
-                        number_out.setText(id_room);
-                        description_out.setText(description_room);
-                        price_out.setText(price_room);
-
+                     }else{
+                        btn_check.setVisible(true);
                         return;
-
+                        
                     }
                 }
-
+                
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null, "Não foi possível efetuar o comando: " + e);
             }
-
-        }
+            
     }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -164,7 +195,7 @@ public class Room extends javax.swing.JFrame {
         btnHome = new javax.swing.JButton();
         btn_check = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        btnVoltar1 = new javax.swing.JButton();
+        btn_back = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1200, 800));
@@ -248,13 +279,13 @@ public class Room extends javax.swing.JFrame {
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icon/image_room.png"))); // NOI18N
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, -1, -1));
 
-        btnVoltar1.setText("Quarto anterior");
-        btnVoltar1.addActionListener(new java.awt.event.ActionListener() {
+        btn_back.setText("Quarto anterior");
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVoltar1ActionPerformed(evt);
+                btn_backActionPerformed(evt);
             }
         });
-        getContentPane().add(btnVoltar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 410, 130, -1));
+        getContentPane().add(btn_back, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 410, 130, -1));
 
         setSize(new java.awt.Dimension(1214, 807));
         setLocationRelativeTo(null);
@@ -262,7 +293,7 @@ public class Room extends javax.swing.JFrame {
 
     private void btn_nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_nextActionPerformed
         next_room();
-        
+               
     }//GEN-LAST:event_btn_nextActionPerformed
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
@@ -279,9 +310,9 @@ public class Room extends javax.swing.JFrame {
         window_home.setVisible(true);
     }//GEN-LAST:event_btn_checkActionPerformed
 
-    private void btnVoltar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltar1ActionPerformed
-//        back_room();
-    }//GEN-LAST:event_btnVoltar1ActionPerformed
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+        back_room();
+    }//GEN-LAST:event_btn_backActionPerformed
 
     /**
      * @param args the command line arguments
@@ -320,7 +351,7 @@ public class Room extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnHome;
-    private javax.swing.JButton btnVoltar1;
+    private javax.swing.JButton btn_back;
     private javax.swing.JButton btn_check;
     private javax.swing.JButton btn_next;
     public static javax.swing.JLabel description_out;
